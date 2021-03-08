@@ -1,1 +1,2 @@
-## 前端面试常考知识点总结
+## Key knowledge of front-end interview
+
