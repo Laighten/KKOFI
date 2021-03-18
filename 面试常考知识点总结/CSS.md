@@ -50,7 +50,7 @@
 5. align-items属性定义项目在交叉轴上如何对齐；
 6. align-content属性定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用；
 
-### 三、块级上下文
+### 三、BFC块级上下文
 
 BFC即块级格式化上下文，它是一个独立的块级渲染容器，拥有自己的渲染规则，不受外部影响，不影响外部特征。
 
@@ -118,30 +118,140 @@ BFC即块级格式化上下文，它是一个独立的块级渲染容器，拥�
 
 ### 七、absolute和relative分别依据什么定位？
 
+- relative 依据自身定位；
+- absolute依据最近的一层元素定位： 定位元素，先找absolute relative fixed来定位，如果没有再找body；
 
+### 八、响应式
 
-### 七、响应式
+常用长度单位总结：
 
+- px,绝对长度单位，最常用；
+- em,相对长度单位，相对于父元素，不常用；
+- rem,相对长度单位，相对于根元素，常用于响应式布局；
 
+响应式布局常用方案：
 
-### 八、两栏布局
+- media-query，根据不同的屏幕宽度设置根元素font-size；
+- rem，基于根元素的相对单位；
 
-​	两栏布局(左侧固定宽度，右侧自适应)
+### 九、两栏布局
 
-```js
-<div class="wrap">
-    <div class="left">
-        左侧固定内容
-    </div>
-    <div class="right">
-        右侧内容自适应
-    </div>
-</div>
-```
+​	两栏布局分一下几种情况：
 
+- 一栏固定宽度，一栏自适应
 
+  ```js
+  //方法一：左侧float:left;右侧margin-left;
+  //因为块级元素有流体特性，即默认会填充满外部容器，所以只需要设置margin，不需要设置width就可以让content填满剩余的部分。
+  <div class="left">left</div>
+  <div class="right">right</div>
+  body,div{
+      padding: 0;
+      margin:0;
+  }
+  .left,.right{
+      height: 200px;
+  }
+  .left{
+      float: left;
+      width: 200px;
+      background-color:skyblue;
+  }
+  .right{
+      margin-left: 200px;
+      background-color: greenyellow;
+  }
+  //方法二：左侧float:left; 右侧overflow:hidden；
+  <div class="left">left</div>
+  <div class="right">right</div>
+  body,div{
+      padding: 0;
+      margin:0;
+  }
+  .left,.right{
+      height:200px;
+  }
+  .left{
+      float:left;
+      width: 200px;
+      background-color:skyblue;
+  }
+  .right{
+      overflow:hidden;
+      background-color: greenyellow;
+  }
+  /*
+  右侧设置的overflow:hidden会触发块级格式化上下文（BFC）。
+  具有BFC特性的元素可以看作是隔离了的独立容器，容器里面的元素不会在布局上影响外面的元素，并且BFC具有普通元素没有特性：如下边距不发生折叠；可以清除浮动；可以阻止元素被覆盖。
+  正因为有了这些特性，所以右边可以用触发BFC的元素来清除左边浮动的影响。
+  
+  触发了BFC的元素仍然保持流体特性，也就是说BFC元素虽然不与浮动交集，自动退避浮动元素宽度的距离，但本身作为普通元素的流体特性依然存在，反映在布局上就是自动填满除去浮动内容以外的剩余空间。
+  */
+  //法三：利用绝对定位,relative是根据自身位置定位的，absolute是根据relative、body来定位的；
+  <div class="wrap">
+      <div class="left">left</div>
+  	<div class="right">right</div>
+  </div>
+  .wrap{
+      position : relative;
+  }
+  .left{ 
+      width: 200px; 
+  }
+  .right{ 
+      position: absolute; 
+      top: 0; 
+      left: 200px; 
+      right: 0
+  }
+  //方法四：利用弹性布局
+  <div class="wrap">
+      <div class="left">left</div>
+  	<div class="right">right</div>
+  </div>
+   body,div{
+       padding: 0;
+       margin:0;
+   }
+  .wrap{
+      display: flex;
+  }
+  .left,.right{
+      height: 200px;
+  }
+  .left{
+      width: 200px;
+      background-color:skyblue;
+  }
+  .right{
+      flex: 1; 
+      background-color: greenyellow;
+  }
+  //flex:1
+  flex-grow : 1; // 这意味着div将以与窗口大小相同的比例增长
+  flex-shrink : 1; // 这意味着div将以与窗口大小相同的比例缩小
+  flex-basis : 0; // 这意味着div没有这样的起始值，并且将根据可用的屏幕大小占用屏幕。例如： - 如果包装器中有3个div，则每个div将占用33％。
+  ```
 
-### 九、三栏布局
+- 一栏不定宽，一栏自适应
+
+  ```js
+  https://blog.csdn.net/baidu_36065997/article/details/80279305
+  ```
+
+- 两栏等高
+
+  ```js
+  
+  ```
+
+- 左右宽度比为1：2，右边又分为上下结构，高度比为1：1
+
+  ```js
+  
+  ```
+
+### 十、三栏布局
 
 > 三栏布局，中间一栏最先加载和渲染（内容最重要）
 >
