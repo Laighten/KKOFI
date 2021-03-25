@@ -35,6 +35,7 @@
 - Content-type：text/html(响应体是html文件) application/octet-stream(响应体是字节流类型，通常会被浏览器当做下载类型处理)  。 它主要是告诉浏览器响应体的类型，可能是html、下载类型等。
 - 缓存机制：Last-Motified/Etag
 - Location：浏览器需要重定向的主机地址
+- Content-Encoding:gzip 压缩方式
 - connection
 
 ##### 	响应体：

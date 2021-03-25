@@ -10,10 +10,12 @@
 在使用 this 时，为了避坑，你要谨记以下三点：
 
 1. 当函数作为对象的方法调用时，函数中的 this 就是该对象；
+
 2. 当函数被正常调用时，**在严格模式下，this 值是 undefined**，非严格模式下 this 指向的是全局对象 window；
+
 3. 嵌套函数中的 this 不会继承外层函数的 this 值。
 
-我们还提了一下箭头函数，因为箭头函数没有自己的执行上下文，所以箭头函数的 this 就是它外层函数的 this。
+4. 我们还提了一下箭头函数，因为箭头函数没有自己的执行上下文，所以箭头函数的 this 就是它外层函数的 this。
 
 1. 直接使用的函数this指向window
 
@@ -119,46 +121,64 @@
    console.log(a.user) //呵呵
    ```
 
-7. 箭头函数中的this指向
+11. 箭头函数中的this指向
+
+    ```js
+    /*
+    箭头函数是ES6中的特性，箭头函数没有执行上下文本所以没有this，它会沿用/捕获外部环境的this。也就是说，箭头函数内部与外部的this是保持一致的。
+    */
+    this.a = 20
+    var test = {
+    	a:40,
+        init:()=>{
+        	console.log(this.a)
+            function go(){
+            	this.a = 60
+                console.log(this.a)
+            }
+            go.prototype.a = 50
+            return go
+        }
+    }
+    var p = test.init()
+    p()
+    new (test.init())()
+    
+    this.a = 20
+    var test = {
+    	a:40,
+        init:function(){
+        	console.log(this.a)
+            function go(){
+            	this.a = 60
+                console.log(this.a)
+            }
+            go.prototype.a = 50
+            return go
+        }
+    }
+    var p = test.init()
+    p()
+    new (test.init())()
+    ```
+
+#### 四、面试真题
+
+1. this的指向（from:字节跳动技术中台一面）
 
    ```js
-   /*
-   箭头函数是ES6中的特性，箭头函数没有执行上下文本所以没有this，它会沿用/捕获外部环境的this。也就是说，箭头函数内部与外部的this是保持一致的。
-   */
-   this.a = 20
-   var test = {
-   	a:40,
-       init:()=>{
-       	console.log(this.a)
-           function go(){
-           	this.a = 60
-               console.log(this.a)
-           }
-           go.prototype.a = 50
-           return go
+   let a = {
+   	x: 1,
+       print () {
+         console.log(this.x);
        }
    }
-   var p = test.init()
-   p()
-   new (test.init())()
-   
-   this.a = 20
-   var test = {
-   	a:40,
-       init:function(){
-       	console.log(this.a)
-           function go(){
-           	this.a = 60
-               console.log(this.a)
-           }
-           go.prototype.a = 50
-           return go
-       }
-   }
-   var p = test.init()
-   p()
-   new (test.init())()
+   a.print();  //1
+   let print = a.print()
+   print();  //undefined
+   //问：如何改变this的指向
+   let print = a.print.bind(a);
+   print()
    ```
 
-   
-
+2. 
