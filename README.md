@@ -55,6 +55,8 @@
 
 - 强制缓存
 - 协商缓存
+- cookie和session
+- localStorage和sessionStorage
 
 ### 性能优化的方法
 

@@ -1,6 +1,6 @@
 ### 一、Vuex底层原理
 
-​	Vuex采用MVC模式中的Model层，规定所有的数据**必须通过action—>mutaion—>state**这个流程进行来改变状态的。再结合Vue的数据视图双向绑定实现页面的更新。统一页面状态管理，可以让复杂的组件交互变的简单清晰，同时在调试时也可以通过DEVtools去查看状态。
+​	Vuex采用MVC模式中的Model层，规定所有的数据**必须通过action—>mutaion—>state**这个流程进行来改变状态的。再结合Vue的数据视图双向绑定实现页面的更新。统一页面状态管理，可以让复杂的组件交互变的简单清晰，同时在调试时也可以通过**DEVtools**去查看状态。
 
 ​	在当前前端的spa模块化项目中不可避免的是某些变量需要在全局范围内引用，此时父子组件的传值，子父组件间的传值，兄弟组件间的传值成了我们需要解决的问题。虽然vue中提供了props（父传子）commit（子传父）兄弟间也可以用localstorage和sessionstorage。但是这种方式在项目开发中带来的问题比他解决的问题（难管理，难维护，代码复杂，安全性低）更多。vuex的诞生也是为了解决这些问题，从而大大提高我们vue项目的开发效率。
 
@@ -50,27 +50,27 @@ Vue.mixin({
 
 - **vuex的state和getters是如何映射到各个组件实例中响应式更新状态呢？**
 
-```js
-//实现getters原理
-        let getters = options.getters || {}
-        // console.log(getters);
-        // this.getters = getters; //不是直接挂载到 getters上 这样只会拿到整个 函数体
-        this.getters = {};
-        // console.log(Object.keys(getters))  // ["myAge","myName"]
-        Object.keys(getters).forEach((getterName) => {
-            // console.log(getterName)  // myAge
-            // 将getterName 放到this.getters = {}中
-            // console.log(this.state);
-            Object.defineProperty(this.getters, getterName, {
-                // 当你要获取getterName（myAge）会自动调用get方法
-                // 箭头函数中没有this               
-                get: () => {
-                    return getters[getterName](this.state)
-                }
-            })
-        })
-//从上面源码，我们可以看出Vuex的state状态是响应式，是借助vue的data是响应式，将state存入vue实例组件的data中；Vuex的getters则是借助vue的计算属性computed实现数据实时监听。
-```
+  ```js
+  //实现getters原理
+          let getters = options.getters || {}
+          // console.log(getters);
+          // this.getters = getters; //不是直接挂载到 getters上 这样只会拿到整个 函数体
+          this.getters = {};
+          // console.log(Object.keys(getters))  // ["myAge","myName"]
+          Object.keys(getters).forEach((getterName) => {
+              // console.log(getterName)  // myAge
+              // 将getterName 放到this.getters = {}中
+              // console.log(this.state);
+              Object.defineProperty(this.getters, getterName, {
+                  // 当你要获取getterName（myAge）会自动调用get方法
+                  // 箭头函数中没有this               
+                  get: () => {
+                      return getters[getterName](this.state)
+                  }
+              })
+          })
+  //从上面源码，我们可以看出Vuex的state状态是响应式，是借助vue的data是响应式，将state存入vue实例组件的data中；Vuex的getters则是借助vue的计算属性computed实现数据实时监听。
+  ```
 
 - #### mutations实现
 

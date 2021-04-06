@@ -58,7 +58,7 @@
 
 ​		Created()：在实例创建完成后发生，当前阶段已经完成了数据观测，也就是可以使用数据，更改数据，在这里更改数据不会触发updated函数。可以做一些初始数据的获取，在当前阶段无法与Dom进行交互，如果非要想，可以通过vm.$nextTick来访问Dom。
 
-> Created()：在实例创建完成后发生，当前阶段已经完成了数据的观测，可以使用数据更改数据且不会触发updated函数，但是当前阶段无法与DOM交互
+> Created()：在实例创建完成后发生，当前阶段已经完成了数据的观测，可以使用数据，更改数据且不会触发updated函数，但是当前阶段无法与DOM交互
 
 ​		beforeMount()：发生在挂载之前，在这之前template模板已导入渲染函数编译。而当前阶段虚拟Dom已经创建完成，即将开始渲染。在此时也可以对数据进行更改，不会触发updated。、
 
@@ -153,7 +153,7 @@ https://www.jb51.net/article/150676.htm
 
 #### 8、Vue模板渲染的原理是什么？
 
-vue中的模板template无法被浏览器解析并渲染，因为这不属于浏览器的标准，不是正确的HTML语法，所有需要**将template转化成一个JavaScript函数，这样浏览器就可以执行这一个函数并渲染出对应的HTML元素，就可以让视图跑起来了，这一个转化的过程，就成为模板编译。**
+​	vue中的模板template无法被浏览器解析并渲染，因为这不属于浏览器的标准，不是正确的HTML语法，所有需要**将template转化成一个JavaScript函数，这样浏览器就可以执行这一个函数并渲染出对应的HTML元素，就可以让视图跑起来了，这一个转化的过程，就成为模板编译。**
 
 模板编译又分三个阶段，解析（parse），优化（optimize），生成（generate），最终生成可执行函数render。
 
@@ -316,3 +316,31 @@ https://www.jb51.net/article/181876.htm
 2. history模式
 
    使用HTML5中的historyAPI实现客户端路由模式，触发后url中没有#
+
+#### 22、Vue中的this.$nextTick
+
+​	**Vue.nextTick( [callback, context\] )](https://cn.vuejs.org/v2/api/#Vue-nextTick)**
+
+- **参数**：
+
+  - `{Function} [callback]`
+  - `{Object} [context]`
+
+- **用法**：
+
+  **在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。**
+
+  ```js
+  // 修改数据
+  vm.msg = 'Hello'
+  // DOM 还没有更新
+  Vue.nextTick(function () {
+    // DOM 更新了
+  })
+  
+  // 作为一个 Promise 使用 (2.1.0 起新增，详见接下来的提示)
+  Vue.nextTick()
+    .then(function () {
+      // DOM 更新了
+    })
+  ```
